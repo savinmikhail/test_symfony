@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Blog index{% endblock %}
+
+{% block body %}
+    <h1>Blog index</h1>
+
+    {{ form_start(searchForm) }}
+    {{ form_widget(searchForm) }}
+        <button class="btn">{{ button_label|default('Find') }}</button>
+    {{ form_end(searchForm) }}
+<br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Text</th>
+                <th>Category</th>
+                <th>Tags</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for blog in blogs %}
+            <tr>
+                <td>{{ blog.id }}</td>
+                <td>{{ blog.title }}</td>
+                <td>{{ blog.text }}</td>
+                {% if blog.category %}
+
+                    <td>{{ blog.category.name }}</td>
+
+                {% endif %}
+
+                {% if blog.tags %}
+                    {% for tag in blog.tags %}
+
+                    <td>{{ tag.name }}</td>
+                    {% endfor %}
+
+                {% else %}
+                    <td> </td>
+
+                {% endif %}
+
+                <td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_blog_show', {'id': blog.id}) }}">show</a>
+                        <a href="{{ path('app_blog_edit', {'id': blog.id}) }}">edit</a>
+                    {% else %}
+                        <a href="{{ path('app_user_blog_show', {'id': blog.id}) }}">show</a>
+                        <a href="{{ path('app_user_blog_edit', {'id': blog.id}) }}">edit</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_blog_new') }}">Create new</a>
+        {% else %}
+            <a href="{{ path('app_user_blog_new') }}">Create new</a>
+    {% endif %}
+{% endblock %}

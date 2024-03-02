@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Blog index{% endblock %}
+
+{% block body %}
+    <h1>Blog index</h1>
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Text</th>
+            <th>Category</th>
+            <th>Tags</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for blog in blogs %}
+            <tr>
+                <td>{{ blog.id }}</td>
+                <td>{{ blog.title }}</td>
+                <td>{{ blog.text }}</td>
+                {% if blog.category %}
+
+                    <td>{{ blog.category.name }}</td>
+
+                {% endif %}
+
+                {% if blog.tags %}
+                    {% for tag in blog.tags %}
+
+                        <td>{{ tag.name }}</td>
+                    {% endfor %}
+
+                {% else %}
+                    <td> </td>
+
+                {% endif %}
+
+
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
